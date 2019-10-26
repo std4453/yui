@@ -1,18 +1,12 @@
-import { backgroundColorGradient, colorGradient } from './constants';
-
-const backgroundColorGradientLength = backgroundColorGradient.length;
-const colorGradientLength = colorGradient.length;
+import { bg1, bg2, color } from './constants';
+import Color from 'color';
 
 function getNodeBackgroundColor(value, maxValue) {
-  return backgroundColorGradient[
-    Math.round(value / maxValue * (backgroundColorGradientLength - 1))
-  ];
+  return Color(bg1).mix(Color(bg2), value / maxValue).string();
 }
 
 function getNodeColor(value, maxValue) {
-  return colorGradient[
-    Math.round(value / maxValue * (colorGradientLength - 1))
-  ];
+  return color
 }
 
 export function transformChartData(rawData) {
@@ -26,7 +20,8 @@ export function transformChartData(rawData) {
   function convertNode(
     sourceNode,
     depth,
-    leftOffset
+    leftOffset,
+    parent
   ) {
     const {
       backgroundColor,
@@ -42,6 +37,7 @@ export function transformChartData(rawData) {
 
     // Add this node to the node-map and assign it a UID.
     const targetNode = (nodes[uidOrCounter] = {
+      parent,
       backgroundColor:
         backgroundColor || getNodeBackgroundColor(value, maxValue),
       color: color || getNodeColor(value, maxValue),
@@ -67,7 +63,8 @@ export function transformChartData(rawData) {
         const targetChildNode = convertNode(
           sourceChildNode,
           depth + 1,
-          leftOffset
+          leftOffset,
+          targetNode,
         );
         leftOffset += targetChildNode.width;
       });
@@ -76,7 +73,7 @@ export function transformChartData(rawData) {
     return targetNode;
   }
 
-  convertNode(rawData, 0, 0);
+  convertNode(rawData, 0, 0, null);
 
   const rootUid = rawData.id || '_0';
 

@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     marginRight: '4px',
     lineHeight: 1.5,
     padding: 0,
-    textAlign: 'left',
+    // textAlign: 'left',
     // transition: 'all ease-in-out 200ms',
     userSelect: 'none',
   }
