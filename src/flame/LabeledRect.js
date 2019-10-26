@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { minWidthToDisplayText, textHeight } from './constants';
 
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
   g: {
-    transition: 'all ease-in-out 200ms',
+    transition: 'all ease 120ms',
   },
   
   rect: {
     cursor: 'pointer',
     stroke: '#ffffff',
-    transition: 'all ease-in-out 200ms',
+    transition: 'all ease 120ms',
+    strokeWidth: 3,
   },
   
   foreignObject: {
-    transition: 'all ease-in-out 200ms',
+    transition: 'all ease 120ms',
     display: 'block',
     pointerEvents: 'none',
   },
@@ -26,8 +27,8 @@ const useStyles = makeStyles({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     fontSize: '18px',
-    marginLeft: '4px',
-    marginRight: '4px',
+    marginLeft: '8px',
+    marginRight: '8px',
     lineHeight: 1.5,
     padding: 0,
     // textAlign: 'left',
@@ -47,12 +48,21 @@ function LabeledRect(props) {
     width,
     x,
     y,
+    onEnter,
+    onExit,
+    node
   } = props;
   const styles = useStyles(props);
+  const onMouseEnter = useCallback(() => onEnter && onEnter(node), [onEnter, node]);
+  const onMouseExit = useCallback(() => onExit && onExit(node), [onExit, node]);
   return (
-    <g className={styles.g} transform={`translate(${x},${y})`}>
+    <g
+      className={styles.g}
+      transform={`translate(${x},${y})`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseExit}
+    >
       <title>{tooltip != null ? tooltip : label}</title>
-      <rect width={width} height={height} fill="white" className={styles.rect} />
       <rect
         width={width}
         height={height}
@@ -69,7 +79,7 @@ function LabeledRect(props) {
           height={height}
           className={styles.foreignObject}
           style={{
-            opacity: isDimmed ? 0.75 : 1,
+            opacity: isDimmed ? 0.3 : 1,
             paddingLeft: x < 0 ? -x : 0,
           }}
           y={height < textHeight ? -textHeight : 0}

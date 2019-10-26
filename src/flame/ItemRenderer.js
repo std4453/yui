@@ -7,7 +7,7 @@ import { FlameGraphContext } from './FlameGraph';
 // This isn't always important,
 // But in this case it is because these rows are somewhat expensive.
 function ItemRenderer({ data: itemData, index, style }) {
-  const classes = useContext(FlameGraphContext);
+  const { classes, onEnter, onExit } = useContext(FlameGraphContext);
   const { data, focusedNode, scale } = itemData;
 
   const uids = data.levels[index];
@@ -48,11 +48,13 @@ function ItemRenderer({ data: itemData, index, style }) {
         key={uid}
         label={node.name}
         onClick={() => itemData.focusNode(uid)}
-        tooltip={node.tooltip}
         width={nodeWidth}
         x={nodeLeft - focusedNodeLeft}
         y={top}
         classes={classes}
+        onEnter={onEnter}
+        onExit={onExit}
+        node={node}
       />
     );
   });

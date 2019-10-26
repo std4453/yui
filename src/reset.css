@@ -1,3 +1,17 @@
 body {
     margin: 0;
+    background-color: #262626;
+}
+:root {
+    font-size: 12px;
+}
+@media (min-width: 1600px) {
+    :root {
+        font-size: 16px;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1599px) {
+    :root {
+        font-size: 14px;
+    }
 }

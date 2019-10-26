@@ -46,6 +46,7 @@ export function transformChartData(rawData) {
       name,
       tooltip,
       width: value / maxValue,
+      value,
     });
 
     // Register the node's depth within the graph.

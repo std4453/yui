@@ -40,13 +40,13 @@ class FlameGraph extends PureComponent {
   };
 
   render() {
-    const { data, height, width, classes } = this.props;
+    const { data, height, width, classes, onEnter, onExit } = this.props;
     const { focusedNode } = this.state;
 
     const itemData = this.getItemData(data, focusedNode, this.focusNode, width);
 
     return (
-      <FlameGraphContext.Provider value={classes}>
+      <FlameGraphContext.Provider value={{ classes, onEnter, onExit }}>
         <List
           height={height}
           innerTagName="svg"
