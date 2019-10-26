@@ -25,8 +25,9 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    fontSize: '12px',
-    fontFamily: 'sans-serif',
+    fontSize: '18px',
+    fontFamily: '\'Roboto Condensed\'',
+    color: '#000000',
     marginLeft: '4px',
     marginRight: '4px',
     lineHeight: 1.5,
@@ -40,7 +41,6 @@ const useStyles = makeStyles({
 
 function LabeledRect({
   backgroundColor,
-  color,
   height,
   isDimmed = false,
   label,
@@ -76,7 +76,7 @@ function LabeledRect({
           }}
           y={height < textHeight ? -textHeight : 0}
         >
-          <div className={styles.div} style={{ color }}>
+          <div className={styles.div}>
             {label}
           </div>
         </foreignObject>
