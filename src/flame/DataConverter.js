@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import memoize from 'memoize-one';
-import FlameGraph from './FlameGraph';
+import { FlameGraph } from './FlameGraph';
 import { transformChartData } from './utils';
 
 // Wrapper component responsible for converting raw chart data into the format required by FlameGraph.

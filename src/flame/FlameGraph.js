@@ -4,7 +4,9 @@ import memoize from 'memoize-one';
 import ItemRenderer from './ItemRenderer';
 import { rowHeight } from './constants';
 
-export default class FlameGraph extends PureComponent {
+const FlameGraphContext = React.createContext({});
+
+class FlameGraph extends PureComponent {
   // Select the root node by default.
   state = {
     focusedNode: this.props.data.nodes[this.props.data.root],
@@ -38,22 +40,26 @@ export default class FlameGraph extends PureComponent {
   };
 
   render() {
-    const { data, height, width } = this.props;
+    const { data, height, width, classes } = this.props;
     const { focusedNode } = this.state;
 
     const itemData = this.getItemData(data, focusedNode, this.focusNode, width);
 
     return (
-      <List
-        height={height}
-        innerTagName="svg"
-        itemCount={data.height}
-        itemData={itemData}
-        itemSize={rowHeight}
-        width={width}
-      >
-        {ItemRenderer}
-      </List>
+      <FlameGraphContext.Provider value={classes}>
+        <List
+          height={height}
+          innerTagName="svg"
+          itemCount={data.height}
+          itemData={itemData}
+          itemSize={rowHeight}
+          width={width}
+        >
+          {ItemRenderer}
+        </List>
+      </FlameGraphContext.Provider>
     );
   }
 }
+
+export { FlameGraphContext, FlameGraph };

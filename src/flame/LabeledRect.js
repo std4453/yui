@@ -20,37 +20,35 @@ const useStyles = makeStyles({
     pointerEvents: 'none',
   },
   
-  div: {
+  label: {
     pointerEvents: 'none',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     fontSize: '18px',
-    fontFamily: '\'Roboto Condensed\'',
-    color: '#000000',
     marginLeft: '4px',
     marginRight: '4px',
     lineHeight: 1.5,
     padding: 0,
-    fontWeight: 400,
     textAlign: 'left',
-    transition: 'all ease-in-out 200ms',
+    // transition: 'all ease-in-out 200ms',
     userSelect: 'none',
   }
 });
 
-function LabeledRect({
-  backgroundColor,
-  height,
-  isDimmed = false,
-  label,
-  onClick,
-  tooltip,
-  width,
-  x,
-  y,
-}) {
-  const styles = useStyles();
+function LabeledRect(props) {
+  const {
+    backgroundColor,
+    height,
+    isDimmed = false,
+    label,
+    onClick,
+    tooltip,
+    width,
+    x,
+    y,
+  } = props;
+  const styles = useStyles(props);
   return (
     <g className={styles.g} transform={`translate(${x},${y})`}>
       <title>{tooltip != null ? tooltip : label}</title>
@@ -76,7 +74,7 @@ function LabeledRect({
           }}
           y={height < textHeight ? -textHeight : 0}
         >
-          <div className={styles.div}>
+          <div className={styles.label}>
             {label}
           </div>
         </foreignObject>

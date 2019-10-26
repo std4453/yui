@@ -8,6 +8,11 @@ const useStyles = makeStyles({
   root: {
     padding: 20,
   },
+  label: {
+    fontFamily: '\'Roboto Condensed\'',
+    color: '#000000',
+    fontWeight: 400,
+  },
 });
 
 function App() {
@@ -18,7 +23,8 @@ function App() {
       <FlameGraph
         width={innerWidth - 40}
         height={innerHeight - 40}
-        data={data} />
+        data={data}
+        classes={{ label: classes.label }}/>
     </div>
   );
 }
