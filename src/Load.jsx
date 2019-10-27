@@ -26,7 +26,7 @@ function Load({ loads }) {
     return (
         <div className={classes.root}>
             <div className={classes.subtitle}>CPU LOAD</div>
-            <div className={classes.text}>{value ? value.toFixed(1) : '-'}/1min</div>
+            <div className={classes.text}>{value ? value.toFixed(3) : '-'}/1min</div>
         </div>
     );
 }

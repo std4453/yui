@@ -22,11 +22,10 @@ const useStyles = makeStyles({
     },
 })
 
-function Duration({ status, profileStart: startTime, profileStop: stopTime, setStart, setEnd }) {
+function Duration({ status, profileStart: startTime, profileEnd: stopTime, setStart, setEnd }) {
     const classes = useStyles();
     const idle = status === 'idle';
     const length = stopTime - startTime;
-    console.log(length);
     const set1m = useCallback(() => {
         setStart(stopTime - 1 * 60 * 1000);
         setEnd(stopTime);

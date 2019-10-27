@@ -47,16 +47,18 @@ function App() {
     const realStart = start || startTime;
     const profileEnd = status === 'stopped' ? stopTime : new Date();
     const realEnd = end || profileEnd;
-    // const backtraces = profiler.backtraces.filter(({ time }) => time >= realStart && time <= realEnd);
-    const merged = useMemo(() => merge(backtraces), [backtraces]);
+    const filtered = backtraces.filter(({ timestamp: time }) => time >= realStart && time <= realEnd);
+    const merged = useMemo(() => merge(filtered), [filtered]);
 
     return <div className={classes.root}>
         <State status={status} />
         <Load loads={loads} />
-        {status !== 'idle' && <>
+        {filtered.length > 0 && (
             <CallGraph onFocus={onFocus} onEnter={onEnter} onExit={onExit} status={status} backtraces={merged} />
-            <Timeline status={status} profileStart={profileStart} profileEnd={profileEnd} realStart={realStart} realEnd={realEnd} />
-        </>}
+        )}
+        {status !== 'idle' && (
+            <Timeline loads={loads} status={status} profileStart={profileStart} profileEnd={profileEnd} realStart={realStart} realEnd={realEnd} />
+        )}
         <div className={classes.rightPanel}>
             <Focused backtraces={merged} focused={focused} />
             <Hovered backtraces={merged} hovered={hovered} />

@@ -76,7 +76,9 @@ function Focused({ backtraces, focused }) {
                 </div>
             </div>
             <div className={classes.spacing} />
-            {node && toPairs(node.entry.attributes).map(([ key, value ], n) => (
+            {node && toPairs(node.entry.attributes)
+                .filter(([, value]) => value !== undefined)
+                .map(([ key, value ], n) => (
                 <div className={classes.attr} key={n}>
                     <span className={classes.key}>{key}</span>
                     <span className={classes.value}>{value}</span>

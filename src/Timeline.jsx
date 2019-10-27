@@ -53,10 +53,11 @@ const useStyles = makeStyles({
     },
 });
 
-function Timeline({ status, start, end, profileStart, profileEnd, realStart, realEnd }) {
+function Timeline({ loads, profileStart, profileEnd, realStart, realEnd }) {
     const classes = useStyles();
     const leftPct = `${((realStart - profileStart) / (profileEnd - profileStart) * 100).toFixed(2)}%`;
     const rightPct = `${((profileEnd - realEnd) / (profileEnd - profileStart) * 100).toFixed(2)}%`;
+    console.log(loads);
     return (
         <div className={classes.root}>
             <svg height="0">
@@ -70,18 +71,15 @@ function Timeline({ status, start, end, profileStart, profileEnd, realStart, rea
             <div className={classes.subtitle}>TIMELINE</div>
             <VictoryChart padding={0} width={14 * 46} height={14 * 4}>
                 <VictoryArea
-                    data={[
-                        { x: 1, y: 1 },
-                        { x: 2, y: 0.5 },
-                        { x: 3, y: 0.8 },
-                        { x: 4, y: 1 },
-                    ]}
+                    data={loads}
+                    x="timestamp"
+                    y="value"
                     style={{
                         data: {
                             fill: 'url(#gradient1)',
                             stroke: '#FFFFFF',
                         }
-                    }} />
+                    }}/>
             </VictoryChart>
             <div
                 className={classes.opaque}
@@ -101,6 +99,8 @@ function Timeline({ status, start, end, profileStart, profileEnd, realStart, rea
                     left: leftPct,
                     right: rightPct,
                 }}/>
+            <Draggable
+                axis="x"
             <div
                 className={classes.bar}
                 style={{ left: leftPct }}/>

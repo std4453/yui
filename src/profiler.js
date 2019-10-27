@@ -9,7 +9,43 @@ import data from './data.json';
 //       resolve(data);
 //     }, 1000)
 //   })
-// }
+// }\
+
+class CpuPoller {
+  constructor(onUpdate, onCreate) {
+    this.req = fetch(`http://192.168.187.58:8080/cpu_load?seconds=1`)
+    this.stopped = false
+    this.onUpdate = onUpdate
+
+    onCreate()
+    this.handleReq()
+  }
+
+  handleReq() {
+     this.req.then(raw => {
+       return raw.json()
+     }).then(json => {
+       if(!this.stopped) {
+         this.onUpdate(json)
+
+         this.req = fetch(`http://192.168.187.58:8080/cpu_load?seconds=1`)
+         this.handleReq()
+       }
+     })
+    // this.req.then(json => {
+    //   if (!this.stopped) {
+    //     this.onUpdate(json)
+
+    //     this.req = fetch()
+    //     this.handleReq()
+    //   }
+    // })
+  }
+
+  stop() {
+    this.stopped = true
+  }
+}
 
 class Poller {
   constructor(freq, onUpdate, onCreate) {
@@ -26,8 +62,6 @@ class Poller {
      this.req.then(raw => {
        return raw.json()
      }).then(json => {
-      console.log('hfgjhg', this.stopped)
-
        if(!this.stopped) {
          this.onUpdate(json)
 
@@ -55,6 +89,7 @@ const useProfiler = (options) => {
   const [loads, setLoads] = useState([]);
   const [status, setStatus] = useState("idle");
   const [poller, setPoller] = useState(null);
+  const [cpuPoller, setCpuPoller] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [stopTime, setStopTime] = useState(null);
 
@@ -64,7 +99,6 @@ const useProfiler = (options) => {
     setStartTime(new Date());
     
     setPoller(new Poller(freq, (json) => {
-      console.log('asdasd');
       const newBacktraces = [];
       
       json.forEach(item => {
@@ -79,7 +113,7 @@ const useProfiler = (options) => {
             
             const name = symbol.name.split("::")
             stack.push(new Entry(name.length > 1 ? name[name.length - 2] : symbol.name, symbol.name, {
-              address: `0x${symbol.addr.toString(16).toUpperCase()}`,
+              address: symbol.addr ? `0x${symbol.addr.toString(16).toUpperCase()}` : undefined,
               'qualified name': symbol.name,
             }))
           })
@@ -87,21 +121,31 @@ const useProfiler = (options) => {
 
         const timestamps = item[1]
 
-        timestamps.forEach(time => newBacktraces.push(new Backtrace(new Date(time * 1000), stack, 1)))
+        timestamps.forEach(time => newBacktraces.push(new Backtrace(new Date(time), stack, 1)))
       })
       
       setBacktraces(bts => [...bts, ...newBacktraces]);
       setStatus('profiling');
     }, () => {
     }))
+
+    setCpuPoller(new CpuPoller((json) => {
+      const newLoad = {
+        timestamp: new Date(),
+        value: json.user
+      }
+      setLoads(lds => [...lds, newLoad]);
+    },()=>{}))
+
   }, []);
 
   const stop = useCallback(() => {
     setStopTime(new Date());
     setStatus("stopped")
     poller.stop();
+    cpuPoller.stop();
     // setPoller(null);
-  }, [poller]);
+  }, [cpuPoller, poller]);
 
   return { backtraces, loads, status, startTime, stopTime, start, stop };
 }
