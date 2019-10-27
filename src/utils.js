@@ -10,4 +10,17 @@ const formatInt = n => {
     return `${~~(n / 1000000)}m`;
 }
 
-export { getREM, formatInt };
+const convertNode = (node) => node ? [...convertNode(node.parent), node.entry.attributes['qualified name']] : [];
+
+const findNode = (root, [first, ...rest]) => {
+    if (root.entry.name === 'all') {
+        if (rest.length === 0) return null;
+        else return findNode(root.children[rest[0]], rest);
+    }
+    if (first === root.entry.attributes['qualified name']) {
+        if (rest.length === 0) return root;
+        else return findNode(root.children[rest[0]], rest);
+    } else return null;
+}
+
+export { getREM, formatInt, convertNode, findNode };

@@ -1,14 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import LabeledRect from './LabeledRect';
 import { minWidthToDisplay, rowHeight } from './constants';
-import { FlameGraphContext } from './FlameGraph';
 
 // Extend PureComponent to avoid rendering more than once per row.
 // This isn't always important,
 // But in this case it is because these rows are somewhat expensive.
 function ItemRenderer({ data: itemData, index, style }) {
-  const { classes, onEnter, onExit } = useContext(FlameGraphContext);
-  const { data, focusedNode, scale } = itemData;
+  const { data, focusedNode, scale, onEnter, onExit, classes } = itemData;
 
   const uids = data.levels[index];
   const focusedNodeLeft = scale(focusedNode.left);

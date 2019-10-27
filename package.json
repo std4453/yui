@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/styles": "^4.5.0",
     "@rehooks/window-size": "^1.0.2",
+    "classnames": "^2.2.6",
     "color": "^3.1.2",
+    "lodash": "^4.17.15",
     "memoize-one": "^5.1.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",

@@ -31,6 +31,7 @@ export function transformChartData(rawData) {
       name,
       tooltip,
       value,
+      ...rest
     } = sourceNode;
 
     const uidOrCounter = id || `_${uidCounter}`;
@@ -47,6 +48,7 @@ export function transformChartData(rawData) {
       tooltip,
       width: value / maxValue,
       value,
+      ...rest
     });
 
     // Register the node's depth within the graph.

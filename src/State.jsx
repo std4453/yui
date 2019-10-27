@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     },
 })
 
-function State({ profiler: { status } }) {
+function State({ status }) {
     const classes = useStyles();
     return (
         <div className={classes.root}>

@@ -20,15 +20,15 @@ const useStyles = makeStyles({
     },
 })
 
-function State({ profiler: { loads } }) {
+function Load({ loads }) {
     const classes = useStyles();
-    const { value } = loads[loads.length - 1];
+    const { value } = loads[loads.length - 1] || {};
     return (
         <div className={classes.root}>
             <div className={classes.subtitle}>CPU LOAD</div>
-            <div className={classes.text}>{value.toFixed(1)}/1min</div>
+            <div className={classes.text}>{value ? value.toFixed(1) : '-'}/1min</div>
         </div>
     );
 }
 
-export default State;
+export default Load;

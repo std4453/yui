@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { formatInt } from './utils';
+import toPairs from 'lodash/toPairs';
+import { formatInt, findNode } from './utils';
 
 const useStyles = makeStyles({
     root: {
@@ -56,27 +57,26 @@ const useStyles = makeStyles({
     },
 });
 
-function Focused({ focused }) {
+function Focused({ backtraces, focused }) {
     const classes = useStyles();
+    const node = findNode(backtraces, focused);
     return (
         <div className={classes.root}>
             <div className={classes.subtitle}>SELECTED</div>
             <div className={classes.text}>
-                {focused ? focused.name : 'N/A'}
+                {node ? node.entry.name : 'N/A'}
             </div>
             <div className={classes.samples}>
                 <div className={classes.subtitle}>SAMPLES</div>
                 <div className={classes.text}>
-                    {focused ? formatInt(focused.value) : '-'}
+                    {node ? formatInt(node.count) : '-'}
                     <span className={classes.dim}>/</span>
-                    {focused ? (0.123 * 100).toFixed(1) : '-'}
+                    {node ? (node.ratio * 100).toFixed(1) : '-'}
                     <span className={classes.dim}>%</span>
                 </div>
             </div>
             <div className={classes.spacing} />
-            {focused && [
-                { key: 'address', value: '0xDEADCAFE' }
-            ].map(({ key, value }, n) => (
+            {node && toPairs(node.entry.attributes).map(([ key, value ], n) => (
                 <div className={classes.attr} key={n}>
                     <span className={classes.key}>{key}</span>
                     <span className={classes.value}>{value}</span>
